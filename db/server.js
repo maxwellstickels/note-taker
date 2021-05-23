@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 const notes = [];
+var idVal = 1;
 
 // Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/../public/index.html')));
@@ -24,16 +25,20 @@ app.get('/api/notes', (req, res) => {
 
 // Make new note, added to note array
 app.post('/api/notes', (req, res) => {
+  idVal++;
   const note = req.body;
+  note.id = idVal;
   notes.push(note);
   res.json(note);
 });
 
-app.delete('/api/notes/:index', (req, res) => {
-  const index = Number(req.params.index);
-  if (!isNaN(index)) {
-    notes.splice(index, 0);
-    return res.json(notes);
+app.delete('/api/notes/:id', (req, res) => {
+  const index = req.params.id;
+  for (var i = 0; i < notes.length; i++) {
+    if (index == notes[i].id) {
+      notes.splice(i, 1);
+      return res.json(notes);
+    }
   }
   res.end(false);
 });
