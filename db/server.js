@@ -10,7 +10,7 @@ var PORT = process.env.PORT || 7070;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var notes = [];
+const notes = [];
 
 // Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/../public/index.html')));
@@ -29,10 +29,10 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.delete('/api/notes/:index', (req, res) => {
-  const note = Number(req.params.index);
-  if (!isNaN(note)) {
+  const index = Number(req.params.index);
+  if (!isNaN(index)) {
     notes.splice(index, 0);
-    return res.json(note);
+    return res.json(notes);
   }
   res.end(false);
 });
